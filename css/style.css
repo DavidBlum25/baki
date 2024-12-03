@@ -1,0 +1,22 @@
+body {
+    background: #79594e;
+}
+
+.main {
+    border: 3px solid;
+    height: 800px;
+    width: 550px;
+    margin: 50px auto;
+    background: #e1d8cb;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 5px #493e3e;
+    text-align: center;
+    font-family: cursive;
+}
+
+#iframe {
+    background: #dde1cc;
+    height: calc(99% - 87px);
+    width: -webkit-fill-available;
+    margin: 0 20px;
+}
