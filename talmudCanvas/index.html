@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talmud Canvas</title>
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-evenly;
+            border: 2px solid rgb(72, 72, 72);
+            background: #fff8e7;
+            width: 85%;
+            margin: 50px auto;
+            align-items: center;
+        }
+        canvas {
+            border: 1px solid rgb(210, 210, 210);
+            background-color: rgb(182, 187, 187);
+            /* flex: 1; */
+        }
+        canvas#pdf-canvas {
+            zoom: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex-container">
+        <canvas id="pdf-canvas"></canvas>
+        <canvas id="talmud-part" width="400" height="350"></canvas>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
