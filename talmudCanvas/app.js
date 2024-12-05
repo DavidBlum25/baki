@@ -1,6 +1,7 @@
  // Remplacez par le chemin vers votre fichier PDF
- const url = 'brakhot_2a.pdf';
-//  const url = 'psahim_113a.pdf';
+//  const url = 'brakhot_2a.pdf';
+ const url = 'psahim_113a.pdf';
+//  const url = 'baba_batra_162a.pdf';
 
 // Sélection des canvas
 const canvas1 = document.getElementById("pdf-canvas");
@@ -58,8 +59,6 @@ function cropTalmudPart() {
 
     // Découper la partie de l'image et la dessiner dans le deuxième canvas
     ctx2.drawImage(canvas1, cropX, cropY, cropWidth, cropHeight, 0, 0, canvas2.width, canvas2.height);
-    // ctx2.drawImage(canvas1, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-
 }
 
 function drawLimits(canvas) {
@@ -86,78 +85,22 @@ function drawLimits(canvas) {
 function findTextTop(canvas) {
     // debugger;
 
-    var steps = [];
-    var range = {from: null, to: null, height: null};
-    var space = 0;
-
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    const delta = 1;
-
-    // Position horizontale centrale (milieu de la largeur du canvas)
-    const x = Math.floor(width / 2) + 40;
-
-    drawLine(x + 6, x + 6, 0, canvas.height, 'black'); 
-
-    // Parcourir les pixels verticaux (par pas de 10 pixels pour optimiser)
-    const imageData = ctx.getImageData(x, 0, 1, height); // Une seule colonne de pixels
-    const data = imageData.data;
-
-    for (let y = 0; y < height; y += delta) { // Parcours par pas de 'delta'
-        const index = y * 4; // Chaque pixel a 4 valeurs RGBA
-        const r = data[index];
-        const g = data[index + 1];
-        const b = data[index + 2];
-
-        // Vérifier si le pixel n'est pas blanc (#ffffff)
-        if (!(r === 255 && g === 255 && b === 255)) {
-            drawLine(0, canvas.width, y, y, 'rgba(0,0,0,0.25)'); 
-
-            //steps.push(y + "px: X");
-            if (range.from == null) {
-                range.from = y;
-            } else if (space > 60) {
-                range.to = y;
-                range.height = range.to - range.from;
-                steps.push(range);
-                
-                //drawLine(0, canvas.width, range.from + 5, range.from + 5, 'rgba(255,0,0,0.3)'); 
-                //drawLine(0, canvas.width, range.to, range.to, 'blue'); 
-                
-                range = {from: null, to: null, height: null};
-            }
-            space = 0;
-            //return y; // Retourne la position verticale du premier pixel non blanc
-        } else {
-            // steps.push(y + "px: O");
-            space++;
-        }
-        
-    }
-
-    console.log(steps);
-    return -1; // Si aucun texte n'est trouvé
-}
-*/
-
-
-function findTextTop(canvas) {
-    // debugger;
-
     var spaces = [];
     var range = {from: null, to: null, height: null};
     var space = 0;
-    var lastPoint = 0;
     var spaceHeight = 0;
 
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
     const delta = 1;
+    const minSpace = 50;
+    const startHead = 200;
+
+    var lastPoint = startHead;
 
     // Position horizontale centrale (milieu de la largeur du canvas)
-    const x = Math.floor(width / 2);
+    const x = Math.floor(width / 2) + 0;
 
     drawLine(x + 2, x + 2, 0, canvas.height, 'black'); 
 
@@ -165,33 +108,100 @@ function findTextTop(canvas) {
     const imageData = ctx.getImageData(x, 0, 1, height); // Une seule colonne de pixels
     const data = imageData.data;
 
-    for (let y = 0; y < height; y += delta) { // Parcours par pas de 'delta'
+    for (let y = 0 + startHead; y < height; y += delta) { // Parcours par pas de 'delta'
         const index = y * 4; // Chaque pixel a 4 valeurs RGBA
         const r = data[index];
         const g = data[index + 1];
         const b = data[index + 2];
 
         // Vérifier si le pixel n'est pas blanc (#ffffff)
-        if (!(r === 255 && g === 255 && b === 255) && space > 10) {
-            
-            spaceHeight = y - lastPoint;
-            
-            drawRectangle(0, y, canvas.width, spaceHeight, 'rgba(0,0,0,0.3)');
-            
-            lastPoint = y;
-            //drawLine(0, canvas.width, y, y, 'rgba(0,0,0,0.3)');
-            //return y; // Retourne la position verticale du premier pixel non blanc
+        if (!(r === 255 && g === 255 && b === 255)) {
+            if (space > minSpace) {
+                lastPoint = y - space;
+                drawRectangle(0, lastPoint, canvas.width, space, 'rgba(0,0,0,0.25)');
+            }
             space = 0;
         } else {
-            
             space++;
-            // if (space > 30)
-            //     lastPoint = y - space;
         }
         
     }
 
     // console.log(steps);
+    return -1; // Si aucun texte n'est trouvé
+}
+*/
+
+function findTextTop(canvas) {
+    // debugger;
+
+    var spaces = [];
+    var range = {from: null, to: null, height: null};
+    var space = 0;
+    var spaceHeight = 0;
+    var lines = [];
+    var datas = [];
+
+    var ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const delta = 1;
+    const minSpace = 50;
+    const startHead = 200;
+    const whiteWidth = 15;
+
+    var lastPoint = startHead;
+
+    // Position horizontale centrale (milieu de la largeur du canvas)
+    const x = Math.floor(width / 2);
+
+    // Parcourir les pixels verticaux (par pas de 10 pixels pour optimiser)
+    for (let i = 0; i < whiteWidth; i++) { // On verifie la couleur sur une petite largeur pour etre sur qu'il n'y a pas de texte
+        var imageData = ctx.getImageData(x + i, 0, 1, height); // Une seule colonne de pixels
+        var data = imageData.data;
+        datas.push(data);
+    }
+           
+
+    for (let y = 0 + startHead; y < height; y += delta) { // Parcours par pas de 'delta'
+        
+        var isWhite = true;
+        datas.forEach(data => {
+
+            const index = y * 4; // Chaque pixel a 4 valeurs RGBA
+            const r = data[index];
+            const g = data[index + 1];
+            const b = data[index + 2];
+
+            // Vérifier si le pixel n'est pas blanc (#ffffff)
+            if (!(r === 255 && g === 255 && b === 255)) {
+                isWhite = false;
+                // if (space > minSpace) {
+                //     lastPoint = y - space;
+                //     drawRectangle(0, lastPoint, canvas.width, space, 'rgba(0,0,0,0.25)');
+                //     spaces.push(space);
+                // }
+                // space = 0;
+            } else {
+                //space++;
+            }
+        });
+
+        if (!isWhite) {
+            if (space > minSpace) {
+                lastPoint = y - space;
+                drawRectangle(0, lastPoint, canvas.width, space, 'rgba(0,0,0,0.25)');
+                spaces.push(space);
+            }
+            space = 0;
+        } else {
+            space++;
+        }
+    }
+    
+    drawRectangle(x, 0, whiteWidth, canvas.height, 'rgba(255,61,0,0.25)'); 
+
+    console.log(spaces);
     return -1; // Si aucun texte n'est trouvé
 }
 
