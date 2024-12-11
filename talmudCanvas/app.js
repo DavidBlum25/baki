@@ -1,9 +1,3 @@
- // Remplacez par le chemin vers votre fichier PDF
-//  const url = 'brakhot_2a.pdf';
-//  const url = 'psahim_113a.pdf';
-//  const url = 'baba_batra_162a.pdf';
-// const url = 'nedarim_3b.pdf';
-
 // Sélection des canvas
 const canvas1 = document.getElementById("pdf-canvas");
 const canvas2 = document.getElementById("talmud-part");
@@ -94,56 +88,6 @@ function drawLimits(canvas) {
     // 5. find the right limit
     // 6. draw
 }
-/*
-function findTextLimits(canvas) {
-    // debugger;
-
-    var spaces = [];
-    var range = {from: null, to: null, height: null};
-    var space = 0;
-    var spaceHeight = 0;
-
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    const delta = 1;
-    const minHeightSpace = 50;
-    const startHead = 200;
-
-    var lastPoint = startHead;
-
-    // Position horizontale centrale (milieu de la largeur du canvas)
-    const x = Math.floor(width / 2) + 0;
-
-    drawLine(x + 2, x + 2, 0, canvas.height, 'black'); 
-
-    // Parcourir les pixels verticaux (par pas de 10 pixels pour optimiser)
-    const imageData = ctx.getImageData(x, 0, 1, height); // Une seule colonne de pixels
-    const data = imageData.data;
-
-    for (let y = 0 + startHead; y < height; y += delta) { // Parcours par pas de 'delta'
-        const index = y * 4; // Chaque pixel a 4 valeurs RGBA
-        const r = data[index];
-        const g = data[index + 1];
-        const b = data[index + 2];
-
-        // Vérifier si le pixel n'est pas blanc (#ffffff)
-        if (!(r === 255 && g === 255 && b === 255)) {
-            if (space > minHeightSpace) {
-                lastPoint = y - space;
-                drawRectangle(0, lastPoint, canvas.width, space, 'rgba(0,0,0,0.25)');
-            }
-            space = 0;
-        } else {
-            space++;
-        }
-        
-    }
-
-    // console.log(steps);
-    return -1; // Si aucun texte n'est trouvé
-}
-*/
 
 function findTextLimits(canvas) {
 
@@ -261,7 +205,33 @@ function drawLine(x1, x2, y1, y2, color) {
     ctx1.restore();
 }
 
+function createSelect(items) {
+    // Create a <select> element
+    const select = document.createElement('select');
+
+    // Loop through the items and create <option> elements
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item; // Set the value attribute
+        option.textContent = item; // Set the display text
+        select.appendChild(option); // Add the option to the <select>
+    });
+
+    // Find the #pages div and append the <select> to it
+    const pagesDiv = document.querySelector('#pages');
+    if (pagesDiv) {
+        pagesDiv.appendChild(select);
+
+        select.onchange = function(e) {
+            loadPage(this.value);
+        };
+    } else {
+        console.error('Div with id #pages not found.');
+    }
+}
+
 setTimeout(() => {
-    loadPage(pages[1]);
-    // drawLimits(canvas1);
+    // Create a dropdown with the listed dapim
+    createSelect(pages);
+    loadPage(pages[0]);
 }, 1500);
