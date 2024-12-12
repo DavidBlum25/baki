@@ -4,6 +4,7 @@ const canvas2 = document.getElementById("talmud-part");
 const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
 const pages = [
+    'eruvin_8a.pdf',
     'shabbat_90b.pdf',
     'sukkah_14a.pdf',
     'baba_batra_170a.pdf',
@@ -55,15 +56,18 @@ function cropTalmudPart(limits) {
 
     const canvas1W = canvas1.width;
     const canvas1H = canvas1.height;
+    const margin = 30;
     console.log("Talmud Page: ", canvas1W, canvas1H);
 
     // Définir les coordonnées de la zone à découper (x, y, largeur, hauteur)
        
-    const cropX = canvas1.width * 0.375; // Position x de départ
-    const cropY = limits.top; // Position y de départ
-    const cropWidth = 580; // Largeur de la zone
+    //const cropX = canvas1.width * 0.375; // Position x de départ
+    const cropX = limits.left - margin; // Position x de départ
+    const cropY = limits.top - margin; // Position y de départ
+    // const cropWidth = 580; // Largeur de la zone
+    const cropWidth = (limits.right - limits.left) + 2 * margin; // Largeur de la zone
     //const cropHeight = cropWidth / ratio; // Hauteur de la zone
-    const cropHeight = limits.bottom - limits.top;
+    const cropHeight = (limits.bottom - limits.top) + 2 * margin;
 
     canvas2.width = cropWidth;
     canvas2.height = cropHeight;
@@ -314,6 +318,10 @@ function findTextLimits(canvas) {
     // for debugging
     // drawRectangle(x, 0, whiteWidth, canvas.height, getColorCode(255, 61, 0, 0.25)); 
 
+    // pour la suite, diciser la page en portions selon les tailles
+    limits.left = widthLimits[0].left;
+    limits.right = widthLimits[0].right;
+    
     console.log(limits);
     return limits; // Si aucun texte n'est trouvé
 }
