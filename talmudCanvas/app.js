@@ -4,6 +4,7 @@ const canvas2 = document.getElementById("talmud-part");
 const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
 const pages = [
+    'baba_kama_107a.pdf',
     'eruvin_8a.pdf',
     'shabbat_90b.pdf',
     'sukkah_14a.pdf',
@@ -163,8 +164,8 @@ function findTextLimits(canvas) {
 
     // ************************ LEFT to RIGHT ************************
     // Position verticale (debut de la colonne de guemara)
-    const y_top = limits.top + 10; 
-    const y_bottom = limits.bottom - 10;
+    const y_top = limits.top + 2; 
+    const y_bottom = limits.bottom - 2;
     const minWidthSpace = 30;
     const startLeft = 340; // start from the middle of Rashi (or Tossfot)
 
