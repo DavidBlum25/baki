@@ -9,26 +9,28 @@
             display: flex;
             justify-content: space-evenly;
             border: 2px solid rgb(72, 72, 72);
-            background: #fff8e7;
-            width: 85%;
+            background: #c9c9c9;
             margin: 50px auto;
             align-items: center;
         }
         canvas {
             border: 1px solid rgb(210, 210, 210);
             background-color: rgb(182, 187, 187);
-            /* flex: 1; */
         }
         canvas#pdf-canvas {
             zoom: 0.3;
         }
+        canvas#talmud-part {
+            zoom: 0.6;
+        }
+
     </style>
 </head>
 <body>
     <div id="pages"></div>
     <div class="flex-container">
         <canvas id="pdf-canvas"></canvas>
-        <canvas id="talmud-part" width="400" height="350"></canvas>
+        <canvas id="talmud-part"></canvas>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="app.js"></script>
