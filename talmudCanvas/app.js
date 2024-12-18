@@ -8,12 +8,12 @@ const pages = [
     'eruvin_8a.pdf',
     'shabbat_90b.pdf',
     'sukkah_14a.pdf',
+    'sanhedrin_2a.pdf',
     'baba_batra_170a.pdf',
     'psahim_113a.pdf',
     'baba_batra_162a.pdf',
     'nedarim_3b.pdf',
     'brakhot_2a.pdf',
-    'sanhedrin_2a.pdf',
 ];
 
 // Configuration de PDF.js
