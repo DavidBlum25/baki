@@ -13,6 +13,7 @@ const pages = [
     'baba_batra_162a.pdf',
     'nedarim_3b.pdf',
     'brakhot_2a.pdf',
+    'sanhedrin_2a.pdf',
 ];
 
 // Configuration de PDF.js
