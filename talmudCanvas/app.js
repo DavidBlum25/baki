@@ -4,6 +4,7 @@ const canvas2 = document.getElementById("talmud-part");
 const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
 const pages = [
+    'megilah_6b.pdf',
     'baba_kama_107a.pdf',
     'eruvin_8a.pdf',
     'shabbat_90b.pdf',
